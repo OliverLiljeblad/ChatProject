@@ -115,4 +115,9 @@ public class Server implements Runnable{ //The class can be executed multiple ti
             }
         }
     }
+
+    public static void main(String[] args) {
+        Server server = new Server();
+        server.run();
+    }
 }
