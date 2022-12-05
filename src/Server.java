@@ -5,12 +5,16 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Server implements Runnable{ //The class can be executed multiple times, many threads
 
     private ArrayList<ConnectionHandler> connections; //List of clients
     private ServerSocket server;
     private boolean done;
+    private ExecutorService pool;
 
     public Server(){
         connections = new ArrayList<>();
@@ -20,28 +24,32 @@ public class Server implements Runnable{ //The class can be executed multiple ti
     public void run(){ //Must have this since runnable need something to run
         try {
             server = new ServerSocket(9999); //Creates new server socket for the server
+            pool = Executors.newCachedThreadPool(); //Makes threads reusable
             while(!done) {
                 Socket client = server.accept(); //Accepting connection creates a socket
                 ConnectionHandler handler = new ConnectionHandler(client); //Creates new handler for every client
                 connections.add(handler); //Adds the client to the list of clients
+                pool.execute(handler);
             }
         } catch (IOException e) { //Catching IO errors
-            // TODO: handle
+            shutdown();
         }
     }
 
     public void broadcast(String message){  //Broadcasts the messege to the client
          for (ConnectionHandler ch : connections){ //Foreach loop
              if (ch != null){
-                 ch.sendMessege(message);
+                 ch.sendMessage(message);
              }
          }
     }
 
-    public void shutdown() {
+    public void shutdown() {   //Shuts down server and program
         try {
+            done = true;
+            pool.shutdown();
             if (!server.isClosed()) {
-                server.close;
+                server.close();
             }
             for (ConnectionHandler ch : connections){
                 ch.shutdown();
@@ -53,7 +61,7 @@ public class Server implements Runnable{ //The class can be executed multiple ti
 
     class ConnectionHandler implements Runnable{ //The class that handles the client connection
         private Socket client;
-        private BufferedReader in; // "In" will "get" the information from the client
+        private BufferedReader in; // "In" will get the information from the client
         private PrintWriter out; //When the server will write something to client, out
         private String nickname;
         public ConnectionHandler(Socket client){ //Several connections take more handlers, Client = client
@@ -81,17 +89,30 @@ public class Server implements Runnable{ //The class can be executed multiple ti
                             out.println("No nickname provided!");
                         }
                     } else if (message.startsWith("/quit")){
-                        // TODO: quit
+                        broadcast(nickname + " left the chat!");
+                        shutdown();
                     } else {
                         broadcast(nickname + ": " + message); //Sends message to all clients
                     }
                 }
             } catch (IOException e) {
-                // TODO: handle
+                shutdown();
             }
         }
-        public void sendMessege(String message){ //Sends message
+        public void sendMessage(String message){ //Sends message
             out.println(message);
+        }
+
+        public void shutdown(){
+            try {
+                in.close();
+                out.close();
+                if (!client.isClosed()){
+                    client.close();
+                }
+            } catch (IOException e){
+                //ignore
+            }
         }
     }
 }
