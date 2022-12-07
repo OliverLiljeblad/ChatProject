@@ -4,7 +4,7 @@ import java.net.Socket;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class Client implements Runnable {
+public class Client implements Runnable { //Runnable enables multiple clients to be able to run at the same time.
 
     private Socket client;
     private BufferedReader in;
@@ -14,7 +14,7 @@ public class Client implements Runnable {
     @Override
     public void run() {
         try {
-            client = new Socket("127.0.0.1", 9999);
+            client = new Socket("127.0.0.1", 9999);                 //Standard Host IP
             out = new PrintWriter(client.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
