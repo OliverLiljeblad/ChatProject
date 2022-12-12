@@ -11,10 +11,11 @@ public class Client implements Runnable { //Runnable enables multiple clients to
     private PrintWriter out;
     private boolean done;
 
+    //Runs the program.
     @Override
     public void run() {
         try {
-            client = new Socket("127.0.0.1", 9999);                 //Standard Host IP
+            client = new Socket("127.0.0.1", 9999);                 //Standard Host IP, connects client to server.
             out = new PrintWriter(client.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
@@ -31,6 +32,7 @@ public class Client implements Runnable { //Runnable enables multiple clients to
         }
     }
 
+    //Disconnects and closes the client.
     public void shutdown() {
         done = true;
         try {
@@ -44,6 +46,7 @@ public class Client implements Runnable { //Runnable enables multiple clients to
         }
     }
 
+    //Manages inputs while done = false.
     class InputHandler implements Runnable {
 
         @Override
