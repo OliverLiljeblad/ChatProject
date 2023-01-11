@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="98c117c7-8d26-493c-944b-d8a9026bb2f8" name="Changes" comment="ChatApp 1.0&#10;&#10;Merge Client and Server">
+    <list default="true" id="98c117c7-8d26-493c-944b-d8a9026bb2f8" name="Changes" comment="Some more comments on Client:">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,7 +98,21 @@
       <option name="project" value="LOCAL" />
       <updated>1670235294876</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Some comments on Client">
+      <created>1670421132562</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1670421132562</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Some more comments on Client:">
+      <created>1670838566030</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1670838566030</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -119,6 +133,8 @@
     <MESSAGE value="First commit" />
     <MESSAGE value="Second commit" />
     <MESSAGE value="ChatApp 1.0&#10;&#10;Merge Client and Server" />
-    <option name="LAST_COMMIT_MESSAGE" value="ChatApp 1.0&#10;&#10;Merge Client and Server" />
+    <MESSAGE value="Some comments on Client" />
+    <MESSAGE value="Some more comments on Client:" />
+    <option name="LAST_COMMIT_MESSAGE" value="Some more comments on Client:" />
   </component>
 </project>

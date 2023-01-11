@@ -1,13 +1,13 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.Scanner;
+import java.io.IOException;
+import java.io.File;
 
 public class Server implements Runnable{ //The class can be executed multiple times, many threads
 
@@ -78,20 +78,42 @@ public class Server implements Runnable{ //The class can be executed multiple ti
                 broadcast(nickname + " joined the chat!");
                 String message;
                 while ((message = in.readLine()) != null) {
-                    if (message.startsWith("/nick ")){
+                    try {
+                        FileWriter myWriter = new FileWriter("logFile.txt", true);
+                        myWriter.write(message);
+                        myWriter.close();
+                    } catch (IOException e) {
+                        System.out.println("Could not write to file");
+                        e.printStackTrace();
+                    }
+                    if (message.startsWith("/nick ")) {
                         String[] messageSplit = message.split(" ", 2); //After space is nickname
-                        if (messageSplit.length == 2){
-                            broadcast(nickname + " renamed themselves to "+ messageSplit[1]);
-                            System.out.println(nickname + " renamed themselves to "+ messageSplit[1]); //Log
+                        if (messageSplit.length == 2) {
+                            broadcast(nickname + " renamed themselves to " + messageSplit[1]);
+                            System.out.println(nickname + " renamed themselves to " + messageSplit[1]); //Log
                             nickname = messageSplit[1];
                             out.println("Successfully changed nickname to " + nickname);
-                        }else {
+                        } else {
                             out.println("No nickname provided!");
                         }
-                    } else if (message.startsWith("/quit")){
+                    } else if (message.startsWith("/quit")) {
                         broadcast(nickname + " left the chat!");
+                        System.out.println(nickname + " left the chat:( ");
                         shutdown();
-                    } else {
+                    } else if (message.startsWith("/log")) {
+                        try {
+                            Scanner myReader = new Scanner(new File("logFile.txt"));
+                            while (myReader.hasNextLine()) {
+                                String data = myReader.nextLine();
+                                System.out.println(data);
+                                broadcast(data);
+                            }
+                            myReader.close();
+                        } catch (IllegalStateException e) {
+                            System.out.println("An error occurred.");
+                            e.printStackTrace();
+                        }
+                    }else {
                         broadcast(nickname + ": " + message); //Sends message to all clients
                     }
                 }
@@ -117,6 +139,20 @@ public class Server implements Runnable{ //The class can be executed multiple ti
     }
 
     public static void main(String[] args) {
+        File logFile = new File("logFile.txt");
+        try {
+            if (logFile.createNewFile()) {
+                System.out.println("File created: " + logFile.getName());
+            } else {
+                System.out.println("File already exists.");
+                FileWriter myWriter = new FileWriter("logFile.txt");
+                myWriter.write("Cleared log.");
+                myWriter.close();
+            }
+        } catch (IOException e) {
+            System.out.println("No can do");
+            e.printStackTrace();
+        }
         Server server = new Server();
         server.run();
     }
