@@ -80,7 +80,7 @@ public class Server implements Runnable{ //The class can be executed multiple ti
                 while ((message = in.readLine()) != null) {
                     try {
                         FileWriter myWriter = new FileWriter("logFile.txt", true);
-                        myWriter.write(message);
+                        myWriter.write("\n" + nickname + ": " + message);
                         myWriter.close();
                     } catch (IOException e) {
                         System.out.println("Could not write to file");
@@ -146,7 +146,7 @@ public class Server implements Runnable{ //The class can be executed multiple ti
             } else {
                 System.out.println("File already exists.");
                 FileWriter myWriter = new FileWriter("logFile.txt");
-                myWriter.write("Cleared log.");
+                myWriter.write("\nInitialized log.");
                 myWriter.close();
             }
         } catch (IOException e) {

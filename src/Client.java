@@ -16,13 +16,15 @@ public class Client implements Runnable { //Runnable enables multiple clients to
     public void run() {
         try {
             client = new Socket("127.0.0.1", 9999);                 //Standard Host IP, connects client to server.
-            out = new PrintWriter(client.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+            out = new PrintWriter(client.getOutputStream(), true);      //Client output.
+            in = new BufferedReader(new InputStreamReader(client.getInputStream()));        //User input.
 
+            //Makes it possible to run several Clients at once.
             InputHandler inHandler = new InputHandler();
             Thread t = new Thread(inHandler);
             t.start();
 
+            //Messages from server/other clients.
             String inMessage;
             while ((inMessage = in.readLine()) != null) {
                 System.out.println(inMessage);
@@ -47,20 +49,20 @@ public class Client implements Runnable { //Runnable enables multiple clients to
     }
 
     //Manages inputs while done = false.
-    class InputHandler implements Runnable {
+    class InputHandler implements Runnable {   //The class can be executed multiple times, many threads
 
         @Override
         public void run() {
             try {
-                BufferedReader inReader = new BufferedReader(new InputStreamReader(System.in));
+                BufferedReader inReader = new BufferedReader(new InputStreamReader(System.in));     //Checks all inputs.
                 while (!done) {
                     String message = inReader.readLine();
-                    if (message.equals("/quit")) {
+                    if (message.equals("/quit")) {      //Quits the program if message is quit.
                         out.println(message);
                         inReader.close();
                         shutdown();
                     } else {
-                        out.println(message);
+                        out.println(message);           //Sends the message.
                     }
                 }
             } catch (IOException e) {
